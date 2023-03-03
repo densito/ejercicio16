@@ -1,24 +1,42 @@
-import logo from './logo.svg';
 import './App.css';
+import Login from './login';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+import NotFoundPage from './NotFoundPage';
+import Register from './register';
+import Tasks from './tasks';
 
 function App() {
+
+  let loggedIn = true;
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+        {/* Route Switch */}
+        <Switch>
+            {/* Redirections to protect our routes */}
+            <Route exact path='/' >
+                {
+                    loggedIn ?
+                    <Redirect from='/login' to='/tasks' />
+                    :
+                    <Redirect from='/' to='/login' /> 
+                }
+            </Route>
+                {/* Login Route */}
+            <Route exact path='/login' component={Login} />
+            <Route exact path='/tasks' component={Tasks} />
+            {/* register Route */}
+            <Route exact path='/register' >
+                {
+                    loggedIn ?
+                    <Redirect from='/register' to='/login' />
+                    :
+                    <Register/> 
+                }
+            </Route>
+            <Route component={NotFoundPage} />
+        </Switch>
+    </Router>
   );
 }
 
